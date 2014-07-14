@@ -1,11 +1,7 @@
 SampleApp::Application.routes.draw do
 
   resources :user
-<<<<<<< HEAD
-  #   uncomment below line  to make application runnable
-=======
-  
->>>>>>> sign-up
+
   root  'static_pages#home'     
   match '/signup', to:'user#new', via: 'get'
   match '/help', to:'static_pages#help', via: 'get'

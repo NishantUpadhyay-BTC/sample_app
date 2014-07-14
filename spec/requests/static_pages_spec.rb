@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "Static pages" do
   include Rails.application.routes.url_helpers
-
+  
   let(:base_title) {"Ruby on Rails Tutorial Sample App "}
 
   subject{ page }
@@ -59,3 +59,5 @@ describe "Static pages" do
 
 end
 end
+
+

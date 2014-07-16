@@ -1,9 +1,12 @@
 SampleApp::Application.routes.draw do
 
   resources :user
-
+  resources :sessions, only: [:new, :create, :destroy]
   root  'static_pages#home'     
+
   match '/signup', to:'user#new', via: 'get'
+  match '/signin', to: 'sessions#new', via: 'get'
+  match '/signout', to: 'sessions#destroy', via: 'delete'
   match '/help', to:'static_pages#help', via: 'get'
   match '/about', to:'static_pages#about', via: 'get'
   match '/contact', to:'static_pages#contact', via:'get'
@@ -18,7 +21,7 @@ SampleApp::Application.routes.draw do
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
-  # Example of named route that can be invoked with purchase_url(id: product.id)
+  # Exampple of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 
   # Example resource route (maps HTTP verbs to controller actions automatically):

@@ -3,7 +3,7 @@ SampleApp::Application.routes.draw do
   resources :user
   resources :sessions, only: [:new, :create, :destroy]
   root  'static_pages#home'     
-
+  match '/index', to:'user#index', via:'get'
   match '/signup', to:'user#new', via: 'get'
   match '/signin', to: 'sessions#new', via: 'get'
   match '/signout', to: 'sessions#destroy', via: 'delete'

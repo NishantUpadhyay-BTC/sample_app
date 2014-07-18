@@ -1,7 +1,8 @@
 SampleApp::Application.routes.draw do
 
   resources :user
-  resources :sessions, only: [:new, :create, :destroy]
+  resources :sessions, only: [:new, :create, :destroy, :edit]
+  resources :microposts, only: [:create, :destroy]
   root  'static_pages#home'     
   match '/index', to:'user#index', via:'get'
   match '/signup', to:'user#new', via: 'get'

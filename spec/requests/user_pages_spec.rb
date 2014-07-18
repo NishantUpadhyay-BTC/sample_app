@@ -8,7 +8,7 @@ describe "User Pages" do
 			sign_in FactoryGirl.create(:user)
 			FactoryGirl.create(:user, name: "Bob", email: "bob@example.com")
 			FactoryGirl.create(:user, name: "Ben", email: "ben@example.com")
-			visit "/user"
+			visit user_index_path
 		end
 
 		it { should have_title('All users') }
@@ -16,7 +16,7 @@ describe "User Pages" do
 
 		it "should list each user" do
 			User.all.each do |user|
-				expact(page).to have_selector('li', text: user.name)
+				expect(page).to have_selector('li', text: user.name)
 			end
 		end
 	end
@@ -40,16 +40,16 @@ describe "User Pages" do
 			let(:admin) { FactoryGirl.create(:admin) }
 			before do
 				sign_in admin
-				visit "/user"
+				visit user_index_path
 			end
 
-			it { should have_link('delete', href: user_path(User.first)) }
+			it { should have_link('delete', href: user_path(user)) }
 			it "should be able to delete  another user" do
 				expect do
 					click_link('delete', match: :first)
 				end.to change(User, :count).by(-1)
 			end
-				it { should_not have_link('delete',href: user_path(admin)) }
+				it { should_not have_link('delete',href: "/user/#{:id}" )}
 		end
 	end
 	
@@ -62,10 +62,19 @@ describe "User Pages" do
 
  	describe "profile page" do
  		let(:user) { FactoryGirl.create(:user) }
+ 		let!(:m1) { FactoryGirl.create(:micropost, user: user, content: "Foo") }
+ 		let!(:m2) { FactoryGirl.create(:micropost, user:user, content: "Bar") }
+
  		before { visit user_path(user) }
 
  		it { should have_content(user.name) }
  		it { should have_title(user.name) }
+
+ 		describe "micropost" do
+ 			it { should have_content(m1.content) }
+ 			it { should have_content(m2.content) }
+ 			it { should have_content( user.micropost.count) }
+ 		end
  	end
 
  	describe "signup" do
@@ -90,7 +99,7 @@ describe "User Pages" do
 				fill_in "Name", with: "Example User"
 				fill_in "Email", with: "user@Example.com"
 				fill_in "Password", with: "foobar"
-				fill_in "Confirmation", with: "foobar"
+				fill_in "Confirm Password", with: "foobar"
 			end
 
 			it "should create a user" do
@@ -105,10 +114,10 @@ describe "User Pages" do
 				it { should have_selector('div.alert.alert-success', text: 'Welcome') }
 			end
 
-			# describe "followed by signout" do
-			# 	before { click_link "Sign out" }
-			# 	it { should_not have_link('Sign in', href:signin_path) }
-			# end
+			 describe "followed by signout" do
+			 	before { click_link "Sign out" }
+			 	it { should_not have_link('Sign in', href:signin_path) }
+			 end
  		end
  	end
 

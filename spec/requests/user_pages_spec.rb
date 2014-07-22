@@ -100,7 +100,7 @@ describe "User Pages" do
  				end
  			end
 
- 			describe "unfolling a user" do
+ 			describe "unfollwing a user" do
  				before do
  					user.follow!(other_user)
  					visit user_path(other_user)
@@ -109,12 +109,17 @@ describe "User Pages" do
  				it "should decrement the followed user count" do
  					expect do 
  						click_button "Unfollow"
+ 					end.to change(user.followed_users, :count).by(-1)
+ 				end
+ 				it "should decrement the other user's followers count" do
+ 					expect do 
+ 						click_button("Unfollow")
  					end.to change(other_user.followers, :count).by(-1)
  				end
 
  				describe "toggling the button" do 
  					before { click_button "Unfollow" }
- 					it { should have_xpath("//input[@values='Follow']") }
+ 					it { should have_xpath("//input[@value='Follow']") }
  				end
  			end
  		end
@@ -214,7 +219,7 @@ describe "User Pages" do
  				visit following_user_path(user)
  			end
  			it { should have_title(full_title('Following')) }
- 			it { should have_selector('h3', text: 'following') }
+ 			it { should have_selector('h3', text: 'Following') }
  			it { should have_link(other_user.name, href: user_path(other_user)) }
  		end
  	end
